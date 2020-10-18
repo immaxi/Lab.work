@@ -1,72 +1,104 @@
 ﻿using System;
-using System.Linq.Expressions;
+using System.Dynamic;
 
-namespace LR_1._Yarovenko
+namespace LR_2._Yarovenko
 {
     class Program
     {
+       
+        abstract class Geometrical_figure
+        {
+
+            string _Figure;
+            public string Figure { get; protected set; }
+
+            public abstract double Area();
+
+            
+        }
+
+        interface IPrint
+        {
+            void Print();
+        }
+
+        class Rectangle : Geometrical_figure, IPrint
+        {
+            double _Height;
+            public double Height { get; protected set; }
+
+            double _Width;
+            public double Width { get; protected set; }
+
+            public Rectangle(double h, double w)
+            {
+                Height = h;
+                Width = w;
+                Figure = "Прямоугольник";
+            }
+
+            public override double Area()
+            {
+                double result = Height * Width;
+                return result;
+            }
+
+            public override string ToString()
+            {
+                return Figure + "(высота: " + Height + ", ширина: " + Width + ") площадью " + Area().ToString();
+            }
+
+            public void Print() { Console.WriteLine(ToString()); }
+        }
+        class Square : Rectangle, IPrint
+        { 
+            public Square(double a) : base(a, a) { Figure = "Квадрат"; }
+
+            public override string ToString()
+            {
+                return Figure + "(сторона: " + Height + ") площадью " + Area().ToString();
+            }
+
+        }
+
+        class Circle : Geometrical_figure, IPrint
+        {
+            double _Radius;
+            public double Radius { get; protected set; }
+
+            public Circle(double r) { Radius = r; Figure = "Круг"; }
+
+            public override double Area()
+            {
+                double result = Math.PI * Radius * Radius;
+                return result;
+            }
+
+            public override string ToString()
+            {
+                return Figure + "(радиус: " + Radius + ") площадью " + Area().ToString();
+            }
+
+            public void Print() { Console.WriteLine(ToString()); }
+
+        }
+
+
         static void Main(string[] args)
         {
             Console.WriteLine("Яровенко Максим, ИУ5Ц-52Б");
 
-            begin: try
-            {
-                Console.Write("Данная прогрfмма решает уравнения биквадратные уравнения вида Ax^4 + Bx^2 + C = 0." +
-                    "\nВведите коэффициенты А, B и C. \nA = ");
-                double a = double.Parse(Console.ReadLine());
-                Console.Write("B = ");
-                double b = double.Parse(Console.ReadLine());
-                Console.Write("C = ");
-                double c = double.Parse(Console.ReadLine());
+            Console.WriteLine("Демонстрация лаборатоной работы, реализующей работу с классами\n");
 
-                double d = b*b - 4*a*c;
+            Rectangle rect = new Rectangle(5, 8);
+            Square sq = new Square(5);
+            Circle circ = new Circle(4);
 
-                if (d < 0) {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Корней нет");
-                    Console.ResetColor();
-                }
+            rect.Print();
+            sq.Print();
+            circ.Print();
 
-                if (d == 0)
-                {
-                    double x1 = Math.Sqrt(-b / (2 * a));
-                    double x2 = - Math.Sqrt(-b / (2 * a));
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("x1 = {0}; x2 = {1}", x1, x2);
-                    Console.ResetColor();
-                }
-                if (d > 0)
-                {
-                    double x1 = Math.Sqrt((-b + Math.Sqrt(d)) / (2 * a));
-                    double x2 = -Math.Sqrt((-b + Math.Sqrt(d)) / (2 * a));
-                    double x3 = Math.Sqrt((-b - Math.Sqrt(d)) / (2 * a));
-                    double x4 = -Math.Sqrt((-b - Math.Sqrt(d)) / (2 * a));
-                    if (double.IsNaN(x3) && !double.IsNaN(x4)) { Console.ForegroundColor = ConsoleColor.Green; 
-                        Console.WriteLine("x1 = {0}; x2 = {1}; x3 = {2}; ", x1, x2, x4); Console.ResetColor();}
-                    if (double.IsNaN(x4) && !double.IsNaN(x3)) { Console.ForegroundColor = ConsoleColor.Green; 
-                        Console.WriteLine("x1 = {0}; x2 = {1}; x3 = {2}; ", x1, x2, x3); Console.ResetColor(); }
-                    if (double.IsNaN(x3) && double.IsNaN(x4)) { Console.ForegroundColor = ConsoleColor.Green; 
-                        Console.WriteLine("x1 = {0}; x2 = {1}", x1, x2); Console.ResetColor(); }
-                    if (!double.IsNaN(x3) && !double.IsNaN(x4)){Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("x1 = {0}; x2 = {1}; x3 = {2}; x4 = {3}", x1, x2, x3, x4); Console.ResetColor();
-                    }
-
-                }
-
-
-            }
-            catch (System.FormatException) {
-                Console.WriteLine("Некорректный ввод числа. Введите повторно");
-                goto begin;
-
-            }
-
-
-
-            
-            
-           
-            
+            Console.ReadLine();
 
         }
     }
